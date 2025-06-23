@@ -47,6 +47,12 @@ public class PostService {
     // 게시글 작성
     @Transactional
     public PostResponse createPost(PostRequest request, Long userId) {
+        System.out.println("=== 게시글 작성 디버깅 ===");
+        System.out.println("받은 userId: " + userId);
+        System.out.println("받은 title: " + request.getTitle());
+        System.out.println("받은 content: " + request.getContent());
+
+
         // 사용자 유무 확인
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다"));

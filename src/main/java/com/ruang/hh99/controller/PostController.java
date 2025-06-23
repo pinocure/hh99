@@ -5,6 +5,7 @@ import com.ruang.hh99.dto.PostRequest;
 import com.ruang.hh99.dto.PostResponse;
 import com.ruang.hh99.dto.PostUpdateRequest;
 import com.ruang.hh99.service.PostService;
+import com.ruang.hh99.util.JwtAuthUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,8 @@ public class PostController {
 
     @Autowired
     private PostService postService;
+    @Autowired
+    private JwtAuthUtil jwtAuthUtil;
 
 
     @GetMapping
@@ -39,10 +42,10 @@ public class PostController {
     @Operation(summary = "2. 게시글 작성")
     public ResponseEntity<ApiResponse<PostResponse>> createPost(
             @Valid @RequestBody PostRequest postRequest,
-            @RequestHeader("Authorization") String token) {
+            @RequestHeader("Authorization") String authorizationHeader) {
         try {
-            // TODO: JWT에서 userId 추출해야함
-            Long userId = 1L;
+            // JWT 토큰에서 userId 추출
+            Long userId = jwtAuthUtil.getCurrentUserIdFromHeader(authorizationHeader);
 
             PostResponse createdPost = postService.createPost(postRequest, userId);
             return ResponseEntity.ok(ApiResponse.success("게시글 작성 성공", createdPost));
@@ -67,10 +70,10 @@ public class PostController {
     public ResponseEntity<ApiResponse<PostResponse>> updatePost(
             @PathVariable Integer id,
             @Valid @RequestBody PostUpdateRequest postUpdateRequest,
-            @RequestHeader("Authorization") String token) {
+            @RequestHeader("Authorization") String authorizationHeader) {
         try {
-            // TODO: JWT 에서 userID 추출해야 함
-            Long currentUserId = 1L;
+            // JWT 토큰에서 userId 추출
+            Long currentUserId = jwtAuthUtil.getCurrentUserIdFromHeader(authorizationHeader);
 
             PostResponse updatedPost = postService.updatePost(id, postUpdateRequest, currentUserId);
             return ResponseEntity.ok(ApiResponse.success("게시글 수정 성공", updatedPost));
@@ -83,10 +86,10 @@ public class PostController {
     @Operation(summary = "5. 게시글 삭제")
     public ResponseEntity<ApiResponse<String>> deletePost(
             @PathVariable Integer id,
-            @RequestHeader("Authorization") String token) {
+            @RequestHeader("Authorization") String authorizationHeader) {
         try {
-            // TODO: JWT에서 userId 추출해야함
-            Long currentUserId = 1L;
+            // JWT 토큰에서 userId 추출
+            Long currentUserId = jwtAuthUtil.getCurrentUserIdFromHeader(authorizationHeader);
 
             postService.deletePost(id, currentUserId);
             return ResponseEntity.ok(ApiResponse.success("게시글 삭제 성공"));
