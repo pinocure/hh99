@@ -11,7 +11,7 @@ public class Post {
     // Talbe 구성 요소
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "post_id")
+    @Column(name = "postId")
     private Integer postId;
 
     @Column(name = "userId", nullable = false)
