@@ -72,11 +72,6 @@ public class PostService {
 
     // 선택한 게시글 조회
     public PostResponse getPost(Integer postId) {
-//        Object[] result = postRepository.findPostWithUserInfoById(postId)
-//                .orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다."));
-//
-//        Post post = (Post) result[0];
-//        String userName = (String) result[1];
 
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다."));
